@@ -5,6 +5,7 @@ import { createClassesRouter } from "./routes/classes";
 import { createZonesRouter } from "./routes/zones";
 import { createSkillsRouter } from "./routes/skills";
 import { createCharactersRouter } from "./routes/characters";
+import { createAuthRouter } from "./routes/auth";
 
 export const createApp = (db: Database) => {
   const app = express();
@@ -26,6 +27,7 @@ export const createApp = (db: Database) => {
   app.use("/api/zones", createZonesRouter(db));
   app.use("/api/skills", createSkillsRouter(db));
   app.use("/api/characters", createCharactersRouter(db));
+  app.use("/api/auth", createAuthRouter(db));
 
   return app;
 };
