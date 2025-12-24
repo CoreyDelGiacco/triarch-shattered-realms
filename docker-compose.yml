@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: triarch_postgres
+    environment:
+      POSTGRES_USER: triarch
+      POSTGRES_PASSWORD: triarch
+      POSTGRES_DB: triarch
+    ports:
+      - "5432:5432"
+    volumes:
+      - triarch_db:/var/lib/postgresql/data
+volumes:
+  triarch_db:
