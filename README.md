@@ -112,7 +112,7 @@ git status
 # Verify no large directories are staged
 git diff --cached --stat
 
-# Ensure node_modules is not included
+# Ensure node_modules is not included (checks if any node_modules files are tracked)
 git ls-files node_modules/ 2>/dev/null | grep -q . && echo "⚠ Warning: node_modules files are tracked!" || echo "✓ No node_modules files tracked"
 ```
 
