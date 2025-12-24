@@ -92,7 +92,9 @@ npm test
 ### Dependency Management
 
 - Dependencies are managed via `package.json` only
-- `package-lock.json` is gitignored to avoid conflicts
+- `package-lock.json` is gitignored (project decision for development flexibility)
+  - **Note**: In production environments, consider committing package-lock.json for reproducible builds
+  - Use `npm ci` in CI/CD pipelines with a committed lockfile for deterministic installs
 - Always run `npm install` after pulling changes
 - Do not modify `node_modules` directly
 
