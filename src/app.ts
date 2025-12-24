@@ -1,11 +1,16 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { Database } from "./db";
+import { createFactionsRouter } from "./routes/factions";
+import { createClassesRouter } from "./routes/classes";
+import { createZonesRouter } from "./routes/zones";
+import { createSkillsRouter } from "./routes/skills";
+import { createCharactersRouter } from "./routes/characters";
 
 export const createApp = (db: Database) => {
   const app = express();
   app.use(express.json());
 
-  app.get("/health", async (_req, res) => {
+  app.get("/health", async (_req: Request, res: Response) => {
     const dbStatus = await db.connect();
     const ok = dbStatus === "ok" || dbStatus === "skipped";
 
@@ -14,6 +19,13 @@ export const createApp = (db: Database) => {
       db: dbStatus,
     });
   });
+
+  // API routes
+  app.use("/api/factions", createFactionsRouter(db));
+  app.use("/api/classes", createClassesRouter(db));
+  app.use("/api/zones", createZonesRouter(db));
+  app.use("/api/skills", createSkillsRouter(db));
+  app.use("/api/characters", createCharactersRouter(db));
 
   return app;
 };

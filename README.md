@@ -19,6 +19,7 @@ Triarch: Shattered Realms combines World of Warcraft's clear class identities, O
 
 For comprehensive design documentation, see:
 - [Gameplay Overview](docs/GAMEPLAY_OVERVIEW.md) - Full game design theory and mechanics
+- [API Documentation](docs/API.md) - RESTful API endpoints and usage
 
 ## Getting Started
 
