@@ -24,6 +24,96 @@ Check the health status of the server and database.
 
 ---
 
+## Authentication
+
+Basic player registration and session handling.
+
+### POST /api/auth/register
+
+Create a new player account.
+
+**Request Body:**
+```json
+{
+  "email": "player@example.com",
+  "password": "securepassword",
+  "display_name": "PlayerOne"
+}
+```
+
+**Response:** 201 Created
+```json
+{
+  "id": 1,
+  "email": "player@example.com",
+  "display_name": "PlayerOne",
+  "created_at": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload
+- 409 Conflict: Email already registered
+
+### POST /api/auth/login
+
+Login and receive a session token.
+
+**Request Body:**
+```json
+{
+  "email": "player@example.com",
+  "password": "securepassword"
+}
+```
+
+**Response:**
+```json
+{
+  "token": "session_token_here",
+  "expires_at": "2024-01-02T00:00:00.000Z",
+  "player": {
+    "id": 1,
+    "email": "player@example.com",
+    "display_name": "PlayerOne"
+  }
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload
+- 401 Unauthorized: Invalid credentials
+
+### GET /api/auth/me
+
+Validate a session token and return the player profile.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+{
+  "player": {
+    "id": 1,
+    "email": "player@example.com",
+    "display_name": "PlayerOne"
+  },
+  "session": {
+    "token": "session_token_here",
+    "created_at": "2024-01-01T00:00:00.000Z",
+    "expires_at": "2024-01-02T00:00:00.000Z"
+  }
+}
+```
+
+**Error Responses:**
+- 401 Unauthorized: Missing/invalid token or expired session
+
+---
+
 ## Factions
 
 The three main factions in the game world.

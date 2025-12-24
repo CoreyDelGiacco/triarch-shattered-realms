@@ -49,6 +49,21 @@ export interface Character {
   updated_at: Date;
 }
 
+export interface Player {
+  id: number;
+  email: string;
+  display_name: string;
+  created_at: Date;
+}
+
+export interface PlayerSession {
+  id: number;
+  player_id: number;
+  token: string;
+  created_at: Date;
+  expires_at: Date;
+}
+
 export interface CharacterWithDetails extends Character {
   faction?: Faction;
   class?: Class;
@@ -156,4 +171,15 @@ export interface AssignTraitRequest {
 export interface UpdateSkillRequest {
   skill_id: number;
   experience_gained: number;
+}
+
+export interface RegisterPlayerRequest {
+  email: string;
+  password: string;
+  display_name: string;
+}
+
+export interface LoginPlayerRequest {
+  email: string;
+  password: string;
 }

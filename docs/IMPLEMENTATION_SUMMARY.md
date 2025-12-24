@@ -6,7 +6,7 @@ This implementation provides a complete backend system for the Triarch: Shattere
 
 ### What Was Implemented
 
-#### 1. Database Schema (8 Migrations)
+#### 1. Database Schema (9 Migrations)
 - **002_factions.sql**: Three factions (Iron Covenant, Verdant Reach, Abyssal Remnant)
 - **003_classes.sql**: Class system with Bulwark tank class
 - **004_zones.sql**: Zone system with three risk levels (Safe, Contested, High-Risk)
@@ -14,8 +14,10 @@ This implementation provides a complete backend system for the Triarch: Shattere
 - **006_abilities.sql**: Six Bulwark abilities (5 active + 1 ultimate)
 - **007_passive_traits.sql**: Five Bulwark passive traits for build customization
 - **008_skills.sql**: 11 life skills for gathering and crafting
+- **009_auth.sql**: Player accounts and session tokens
 
 #### 2. API Endpoints (RESTful)
+- **Auth**: POST /api/auth/register, POST /api/auth/login, GET /api/auth/me
 - **Factions**: GET /api/factions, GET /api/factions/:id
 - **Classes**: GET /api/classes, GET /api/classes/:id (includes abilities and traits)
 - **Zones**: GET /api/zones, GET /api/zones/:id
@@ -37,6 +39,7 @@ This implementation provides a complete backend system for the Triarch: Shattere
 #### 4. Game Mechanics Implementation
 - **Level cap at 60** (enforced in database and API)
 - **Stat allocation constraint**: Total points = character level
+- **Auth stub**: Register/login with session tokens (24h expiry)
 - **Bulwark class**: Complete with all 6 abilities from the design doc
   - Shield Slam (15s cooldown)
   - Defensive Stance (20s cooldown)
@@ -56,8 +59,8 @@ This implementation provides a complete backend system for the Triarch: Shattere
 
 #### 6. Testing
 - Health check tests
-- API endpoint tests (6 tests)
-- All tests passing
+- API endpoint tests (9 tests)
+- All tests passing locally
 - Build verification successful
 
 ### Key Features from Design Document
@@ -95,7 +98,7 @@ Skills (11 entries: 4 gathering, 7 crafting)
 ### Next Steps for Production
 
 1. **Security Hardening**
-   - Add rate limiting middleware (CodeQL finding)
+   - Expand rate limiting coverage beyond auth endpoints
    - Implement authentication/authorization
    - Add input sanitization
    - Setup HTTPS/TLS
@@ -120,9 +123,11 @@ Skills (11 entries: 4 gathering, 7 crafting)
 
 ### Files Created/Modified
 
-**New Files** (21):
-- migrations/002_factions.sql through 008_skills.sql (7 files)
+**New Files** (20):
+- migrations/002_factions.sql through 009_auth.sql (8 files)
 - src/types.ts
+- src/routes/auth.ts
+- src/middleware/rateLimit.ts
 - src/routes/factions.ts
 - src/routes/classes.ts
 - src/routes/zones.ts
@@ -131,17 +136,17 @@ Skills (11 entries: 4 gathering, 7 crafting)
 - tests/api.test.ts
 - docs/API.md
 - docs/IMPLEMENTATION_SUMMARY.md (this file)
+- design/authentication.md
 
-**Modified Files** (4):
+**Modified Files** (3):
 - src/app.ts (added route registrations)
-- README.md (added API documentation link)
+- README.md (updated quickstart)
 - package.json (added @types/pg)
-- Tests and type fixes
 
 ### Statistics
 - **Lines of SQL**: ~300
 - **Lines of TypeScript**: ~1,200
-- **API Endpoints**: 17
-- **Database Tables**: 11
-- **Tests**: 6 passing
+- **API Endpoints**: 20
+- **Database Tables**: 13
+- **Tests**: 9 passing
 - **Build**: ✅ Successful

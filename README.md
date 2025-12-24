@@ -20,6 +20,7 @@ Triarch: Shattered Realms combines World of Warcraft's clear class identities, O
 For comprehensive design documentation, see:
 - [Gameplay Overview](docs/GAMEPLAY_OVERVIEW.md) - Full game design theory and mechanics
 - [API Documentation](docs/API.md) - RESTful API endpoints and usage
+- [Authentication Stub](design/authentication.md) - Initial player auth flow
 
 ## Getting Started
 
@@ -51,6 +52,26 @@ npm run build
 npm start
 ```
 
+### Auth Stub Quickstart
+
+```bash
+# Register a new player
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"player@example.com","password":"securepassword","display_name":"PlayerOne"}'
+
+# Login and get a session token
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"player@example.com","password":"securepassword"}'
+```
+
+Use the returned `token` as a bearer token for session validation:
+
+```bash
+curl http://localhost:3000/api/auth/me -H "Authorization: Bearer <token>"
+```
+
 ### Database
 
 ```bash
@@ -71,6 +92,7 @@ npm test
 
 ```
 ├── docs/              # Design documentation
+├── design/            # System design docs
 ├── migrations/        # Database migrations
 ├── scripts/           # Utility scripts
 ├── src/              # Source code

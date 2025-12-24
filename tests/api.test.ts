@@ -65,4 +65,45 @@ describe("API Endpoints", () => {
       expect(response.body).toHaveProperty("error");
     });
   });
+
+  describe("POST /api/auth/register", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/auth/register")
+        .send({
+          email: "not-an-email",
+          password: "short",
+          display_name: "Hi",
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("POST /api/auth/login", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/auth/login")
+        .send({
+          email: "invalid",
+          password: "short",
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("GET /api/auth/me", () => {
+    it("returns 401 when token is missing", async () => {
+      const response = await request(app).get("/api/auth/me");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+  });
 });
