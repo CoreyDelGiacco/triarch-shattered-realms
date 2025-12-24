@@ -113,7 +113,7 @@ git status
 git diff --cached --stat
 
 # Ensure node_modules is not included
-git ls-files | grep -q node_modules && echo "⚠ Warning: node_modules files are tracked!" || echo "✓ No node_modules files tracked"
+git ls-files node_modules/ 2>/dev/null | grep -q . && echo "⚠ Warning: node_modules files are tracked!" || echo "✓ No node_modules files tracked"
 ```
 
 ## License
