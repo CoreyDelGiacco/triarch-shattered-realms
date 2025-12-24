@@ -92,7 +92,9 @@ npm test
 ### Dependency Management
 
 - Dependencies are managed via `package.json` only
-- `package-lock.json` is gitignored (project decision for development flexibility)
+- `package-lock.json` is gitignored (existing project decision for development flexibility)
+  - This allows developers to get the latest compatible versions within the specified ranges
+  - Trade-off: May lead to version inconsistencies across different environments
   - **Note**: For production deployments requiring deterministic installs:
     - Option 1: Temporarily commit package-lock.json before deploying, then remove it
     - Option 2: Generate package-lock.json during CI/CD build process
@@ -111,7 +113,7 @@ git status
 git diff --cached --stat
 
 # Ensure node_modules is not included
-git ls-files | grep node_modules || echo "✓ No node_modules files tracked"
+git ls-files | grep -q node_modules && echo "⚠ Warning: node_modules files are tracked!" || echo "✓ No node_modules files tracked"
 ```
 
 ## License
