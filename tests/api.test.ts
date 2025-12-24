@@ -16,7 +16,7 @@ describe("API Endpoints", () => {
   });
 
   describe("GET /api/factions", () => {
-    it("returns 503 when database is disabled", async () => {
+    it("returns 500 when database is disabled", async () => {
       const response = await request(app).get("/api/factions");
 
       expect(response.status).toBe(500);
@@ -25,7 +25,7 @@ describe("API Endpoints", () => {
   });
 
   describe("GET /api/classes", () => {
-    it("returns 503 when database is disabled", async () => {
+    it("returns 500 when database is disabled", async () => {
       const response = await request(app).get("/api/classes");
 
       expect(response.status).toBe(500);
@@ -34,7 +34,7 @@ describe("API Endpoints", () => {
   });
 
   describe("GET /api/zones", () => {
-    it("returns 503 when database is disabled", async () => {
+    it("returns 500 when database is disabled", async () => {
       const response = await request(app).get("/api/zones");
 
       expect(response.status).toBe(500);
@@ -43,7 +43,7 @@ describe("API Endpoints", () => {
   });
 
   describe("GET /api/skills", () => {
-    it("returns 503 when database is disabled", async () => {
+    it("returns 500 when database is disabled", async () => {
       const response = await request(app).get("/api/skills");
 
       expect(response.status).toBe(500);
@@ -52,7 +52,7 @@ describe("API Endpoints", () => {
   });
 
   describe("POST /api/characters", () => {
-    it("returns 503 when database is disabled", async () => {
+    it("returns 500 when database is disabled", async () => {
       const response = await request(app)
         .post("/api/characters")
         .send({
