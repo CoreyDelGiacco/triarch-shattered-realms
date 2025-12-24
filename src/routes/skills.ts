@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { Database } from "../db";
 import { Skill } from "../types";
 
@@ -6,7 +6,7 @@ export const createSkillsRouter = (db: Database) => {
   const router = Router();
 
   // GET /api/skills - List all skills
-  router.get("/", async (req, res) => {
+  router.get("/", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { category } = req.query;
@@ -30,7 +30,7 @@ export const createSkillsRouter = (db: Database) => {
   });
 
   // GET /api/skills/:id - Get specific skill
-  router.get("/:id", async (req, res) => {
+  router.get("/:id", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;

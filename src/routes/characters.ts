@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { Database } from "../db";
 import {
   Character,
@@ -14,7 +14,7 @@ export const createCharactersRouter = (db: Database) => {
   const router = Router();
 
   // GET /api/characters - List all characters
-  router.get("/", async (_req, res) => {
+  router.get("/", async (_req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const result = await pool.query<CharacterWithDetails>(
@@ -34,7 +34,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // GET /api/characters/:id - Get specific character with full details
-  router.get("/:id", async (req, res) => {
+  router.get("/:id", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;
@@ -99,7 +99,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // POST /api/characters - Create new character
-  router.post("/", async (req, res) => {
+  router.post("/", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { name, faction_id, class_id }: CreateCharacterRequest = req.body;
@@ -153,7 +153,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // PATCH /api/characters/:id/stats - Update character stats
-  router.patch("/:id/stats", async (req, res) => {
+  router.patch("/:id/stats", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;
@@ -209,7 +209,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // POST /api/characters/:id/abilities - Assign ability to character
-  router.post("/:id/abilities", async (req, res) => {
+  router.post("/:id/abilities", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;
@@ -261,7 +261,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // POST /api/characters/:id/traits - Assign trait to character
-  router.post("/:id/traits", async (req, res) => {
+  router.post("/:id/traits", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;
@@ -321,7 +321,7 @@ export const createCharactersRouter = (db: Database) => {
   });
 
   // POST /api/characters/:id/skills - Update character skill
-  router.post("/:id/skills", async (req, res) => {
+  router.post("/:id/skills", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;

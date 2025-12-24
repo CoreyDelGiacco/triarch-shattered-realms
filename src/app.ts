@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { Database } from "./db";
 import { createFactionsRouter } from "./routes/factions";
 import { createClassesRouter } from "./routes/classes";
@@ -10,7 +10,7 @@ export const createApp = (db: Database) => {
   const app = express();
   app.use(express.json());
 
-  app.get("/health", async (_req, res) => {
+  app.get("/health", async (_req: Request, res: Response) => {
     const dbStatus = await db.connect();
     const ok = dbStatus === "ok" || dbStatus === "skipped";
 

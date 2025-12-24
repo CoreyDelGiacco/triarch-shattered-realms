@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { Database } from "../db";
 import { Class, Ability, PassiveTrait } from "../types";
 
@@ -6,7 +6,7 @@ export const createClassesRouter = (db: Database) => {
   const router = Router();
 
   // GET /api/classes - List all classes
-  router.get("/", async (_req, res) => {
+  router.get("/", async (_req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const result = await pool.query<Class>(
@@ -23,7 +23,7 @@ export const createClassesRouter = (db: Database) => {
   });
 
   // GET /api/classes/:id - Get specific class with abilities and traits
-  router.get("/:id", async (req, res) => {
+  router.get("/:id", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;

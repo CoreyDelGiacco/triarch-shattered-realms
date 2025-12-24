@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { Database } from "../db";
 import { Zone } from "../types";
 
@@ -6,7 +6,7 @@ export const createZonesRouter = (db: Database) => {
   const router = Router();
 
   // GET /api/zones - List all zones
-  router.get("/", async (_req, res) => {
+  router.get("/", async (_req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const result = await pool.query<Zone>(
@@ -20,7 +20,7 @@ export const createZonesRouter = (db: Database) => {
   });
 
   // GET /api/zones/:id - Get specific zone
-  router.get("/:id", async (req, res) => {
+  router.get("/:id", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { Database } from "../db";
 import { Faction } from "../types";
 
@@ -6,7 +6,7 @@ export const createFactionsRouter = (db: Database) => {
   const router = Router();
 
   // GET /api/factions - List all factions
-  router.get("/", async (_req, res) => {
+  router.get("/", async (_req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const result = await pool.query<Faction>(
@@ -20,7 +20,7 @@ export const createFactionsRouter = (db: Database) => {
   });
 
   // GET /api/factions/:id - Get specific faction
-  router.get("/:id", async (req, res) => {
+  router.get("/:id", async (req: Request, res: Response) => {
     try {
       const pool = db.getPool();
       const { id } = req.params;
