@@ -80,6 +80,37 @@ npm test
 └── tests/            # Test files
 ```
 
+## Development Best Practices
+
+### Git Workflow
+
+1. **Never commit `node_modules`**: The `.gitignore` file is configured to exclude dependencies. Always verify with `git status` before committing.
+2. **Check ignored files**: Use `git check-ignore -v <file>` to verify if a file is properly ignored.
+3. **Clean working directory**: Ensure `git status` shows a clean state before creating commits.
+4. **Review changes**: Use `git diff` to review all changes before committing.
+
+### Dependency Management
+
+- Dependencies are managed via `package.json` only
+- `package-lock.json` is gitignored to avoid conflicts
+- Always run `npm install` after pulling changes
+- Do not modify `node_modules` directly
+
+### Before Committing
+
+Run this checklist:
+```bash
+# Check what will be committed
+git status
+
+# Verify no large directories are staged
+git diff --cached --stat
+
+# Ensure node_modules is not included
+git ls-files | grep node_modules
+# (should return nothing)
+```
+
 ## License
 
 This project is private and proprietary.
