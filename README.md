@@ -93,8 +93,10 @@ npm test
 
 - Dependencies are managed via `package.json` only
 - `package-lock.json` is gitignored (project decision for development flexibility)
-  - **Note**: In production environments, consider committing package-lock.json for reproducible builds
-  - Use `npm ci` in CI/CD pipelines with a committed lockfile for deterministic installs
+  - **Note**: For production deployments requiring deterministic installs:
+    - Option 1: Temporarily commit package-lock.json before deploying, then remove it
+    - Option 2: Generate package-lock.json during CI/CD build process
+    - Option 3: Use specific version numbers in package.json (no ^ or ~ ranges)
 - Always run `npm install` after pulling changes
 - Do not modify `node_modules` directly
 
@@ -109,8 +111,7 @@ git status
 git diff --cached --stat
 
 # Ensure node_modules is not included
-git ls-files | grep node_modules
-# (should return nothing)
+git ls-files | grep node_modules || echo "✓ No node_modules files tracked"
 ```
 
 ## License
