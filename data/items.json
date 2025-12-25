@@ -16,6 +16,46 @@
     "value": 5
   },
   {
+    "code": "COPPER_ORE",
+    "name": "Copper Ore",
+    "description": "Soft copper ore suitable for starter smithing recipes.",
+    "rarity": "COMMON",
+    "stack_limit": 50,
+    "value": 4
+  },
+  {
+    "code": "ASH_LOG",
+    "name": "Ash Log",
+    "description": "A light log harvested from ash trees for basic woodworking.",
+    "rarity": "COMMON",
+    "stack_limit": 40,
+    "value": 3
+  },
+  {
+    "code": "RIVER_FISH",
+    "name": "River Fish",
+    "description": "A common fish caught in calmer waterways.",
+    "rarity": "COMMON",
+    "stack_limit": 30,
+    "value": 6
+  },
+  {
+    "code": "SILVERLEAF",
+    "name": "Silverleaf",
+    "description": "A fragrant herb used in mid-tier tonics.",
+    "rarity": "UNCOMMON",
+    "stack_limit": 20,
+    "value": 35
+  },
+  {
+    "code": "STORM_SHARD",
+    "name": "Storm Shard",
+    "description": "A crackling mineral fragment from unstable storm veins.",
+    "rarity": "RARE",
+    "stack_limit": 10,
+    "value": 140
+  },
+  {
     "code": "VERDANT_BLOOM",
     "name": "Verdant Bloom",
     "description": "A rare herb prized by Verdant Reach alchemists.",

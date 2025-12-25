@@ -1,0 +1,71 @@
+[
+  {
+    "code": "COPPER_VEIN",
+    "name": "Copper Vein",
+    "skill_code": "MINING",
+    "zone_id": 1,
+    "position": { "x": 112.4, "y": 92.8 },
+    "interaction_radius": 8,
+    "cooldown_seconds": 60,
+    "min_skill_level": 1,
+    "loot_table": [
+      { "item_code": "COPPER_ORE", "min_quantity": 1, "max_quantity": 3, "weight": 65 },
+      { "item_code": "IRON_ORE", "min_quantity": 1, "max_quantity": 2, "weight": 35 }
+    ]
+  },
+  {
+    "code": "ASHWOOD_GROVE",
+    "name": "Ashwood Grove",
+    "skill_code": "WOODCUTTING",
+    "zone_id": 1,
+    "position": { "x": 98.5, "y": 104.2 },
+    "interaction_radius": 10,
+    "cooldown_seconds": 75,
+    "min_skill_level": 1,
+    "loot_table": [
+      { "item_code": "ASH_LOG", "min_quantity": 2, "max_quantity": 4, "weight": 100 }
+    ]
+  },
+  {
+    "code": "RIVERPOOL_FISHING",
+    "name": "Riverpool Fishing Spot",
+    "skill_code": "FISHING",
+    "zone_id": 2,
+    "position": { "x": 140.0, "y": 78.3 },
+    "interaction_radius": 12,
+    "cooldown_seconds": 45,
+    "min_skill_level": 1,
+    "loot_table": [
+      { "item_code": "RIVER_FISH", "min_quantity": 1, "max_quantity": 3, "weight": 85 },
+      { "item_code": "SILVERLEAF", "min_quantity": 1, "max_quantity": 1, "weight": 15 }
+    ]
+  },
+  {
+    "code": "SILVERLEAF_PATCH",
+    "name": "Silverleaf Patch",
+    "skill_code": "HERBALISM",
+    "zone_id": 2,
+    "position": { "x": 152.6, "y": 88.9 },
+    "interaction_radius": 9,
+    "cooldown_seconds": 90,
+    "min_skill_level": 5,
+    "loot_table": [
+      { "item_code": "SILVERLEAF", "min_quantity": 1, "max_quantity": 2, "weight": 70 },
+      { "item_code": "VERDANT_BLOOM", "min_quantity": 1, "max_quantity": 1, "weight": 30 }
+    ]
+  },
+  {
+    "code": "STORM_SHARD_CRYSTAL",
+    "name": "Storm Shard Crystal",
+    "skill_code": "MINING",
+    "zone_id": 3,
+    "position": { "x": 210.7, "y": 64.1 },
+    "interaction_radius": 7,
+    "cooldown_seconds": 120,
+    "min_skill_level": 10,
+    "loot_table": [
+      { "item_code": "STORM_SHARD", "min_quantity": 1, "max_quantity": 1, "weight": 45 },
+      { "item_code": "IRON_ORE", "min_quantity": 2, "max_quantity": 4, "weight": 55 }
+    ]
+  }
+]

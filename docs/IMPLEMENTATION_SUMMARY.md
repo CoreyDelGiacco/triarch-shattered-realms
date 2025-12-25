@@ -6,7 +6,7 @@ This implementation provides a complete backend system for the Triarch: Shattere
 
 ### What Was Implemented
 
-#### 1. Database Schema (9 Migrations)
+#### 1. Database Schema (12 Migrations)
 - **002_factions.sql**: Three factions (Iron Covenant, Verdant Reach, Abyssal Remnant)
 - **003_classes.sql**: Class system with Bulwark tank class
 - **004_zones.sql**: Zone system with three risk levels (Safe, Contested, High-Risk)
@@ -15,6 +15,9 @@ This implementation provides a complete backend system for the Triarch: Shattere
 - **007_passive_traits.sql**: Five Bulwark passive traits for build customization
 - **008_skills.sql**: 11 life skills for gathering and crafting
 - **009_auth.sql**: Player accounts and session tokens
+- **010_world_state.sql**: Character world positions per zone
+- **011_inventory.sql**: Character inventory storage
+- **012_gathering.sql**: Gathering cooldowns per node
 
 #### 2. API Endpoints (RESTful)
 - **Auth**: POST /api/auth/register, POST /api/auth/login, GET /api/auth/me
@@ -22,6 +25,9 @@ This implementation provides a complete backend system for the Triarch: Shattere
 - **Classes**: GET /api/classes, GET /api/classes/:id (includes abilities and traits)
 - **Zones**: GET /api/zones, GET /api/zones/:id
 - **Skills**: GET /api/skills, GET /api/skills/:id (with category filtering)
+- **World**: POST /api/world/zone-enter, GET /api/world/state/:characterId
+- **Inventory**: GET /api/inventory/:characterId, POST /api/inventory/:characterId/add, POST /api/inventory/:characterId/remove
+- **Gathering**: GET /api/gathering/nodes/:zoneId, POST /api/gathering/attempt
 - **Characters**: Full CRUD operations
   - GET /api/characters - List all
   - GET /api/characters/:id - Get with full details
@@ -50,16 +56,22 @@ This implementation provides a complete backend system for the Triarch: Shattere
 - **Passive traits**: 5 traits with max levels for build diversity
 - **Zone risk system**: Safe, Contested, High-Risk with appropriate loot rules
 - **Skills system**: Gathering (Mining, Woodcutting, Fishing, Herbalism) and Crafting (Blacksmithing, Leatherworking, Tailoring, Alchemy, Enchanting, Runecrafting, Cooking)
+- **Gathering loop**: Server-authoritative node validation, weighted loot, inventory updates, and node cooldowns
 
-#### 5. Documentation
+#### 5. Data Ownership
+- `/data` now includes items, zones, factions, classes, abilities, and gathering nodes
+- Schemas in `/data/schemas` validate each data file at boot
+
+#### 6. Documentation
 - Comprehensive API documentation with examples
 - Game design constraints documented
 - Example workflows for common operations
 - README updated with API reference
 
-#### 6. Testing
+#### 7. Testing
 - Health check tests
-- API endpoint tests (9 tests)
+- API endpoint tests (validation coverage)
+- Loot selection unit tests with deterministic RNG
 - All tests passing locally
 - Build verification successful
 
@@ -72,6 +84,7 @@ This implementation provides a complete backend system for the Triarch: Shattere
 ✅ **Player-Driven Economy**: Gathering and crafting skills
 ✅ **Clear Combat**: Limited ability sets (5 active + 1 ultimate for Bulwark)
 ✅ **Bulwark Class**: Complete implementation with all abilities and traits
+✅ **Server-Authoritative Gathering**: Node validation, cooldowns, and weighted loot
 
 ### Technical Stack
 - **Language**: TypeScript with strict mode
@@ -93,6 +106,9 @@ Factions (3 entries)
 
 Zones (3 entries: Safe, Contested, High-Risk)
 Skills (11 entries: 4 gathering, 7 crafting)
+Inventory
+World State
+Gathering Cooldowns
 ```
 
 ### Next Steps for Production
@@ -111,9 +127,9 @@ Skills (11 entries: 4 gathering, 7 crafting)
 3. **Features**
    - Add remaining classes for each faction
    - Implement faction warfare mechanics
-   - Add inventory and equipment system
    - Implement combat calculation engine
    - Add quest system
+   - Add movement updates with server validation
 
 4. **DevOps**
    - Setup CI/CD pipeline
@@ -123,30 +139,29 @@ Skills (11 entries: 4 gathering, 7 crafting)
 
 ### Files Created/Modified
 
-**New Files** (20):
-- migrations/002_factions.sql through 009_auth.sql (8 files)
-- src/types.ts
-- src/routes/auth.ts
-- src/middleware/rateLimit.ts
-- src/routes/factions.ts
-- src/routes/classes.ts
-- src/routes/zones.ts
-- src/routes/skills.ts
-- src/routes/characters.ts
-- tests/api.test.ts
-- docs/API.md
-- docs/IMPLEMENTATION_SUMMARY.md (this file)
-- design/authentication.md
+**New Files**:
+- migrations/012_gathering.sql
+- data/zones.json, data/factions.json, data/classes.json, data/abilities.json, data/nodes.json
+- data/schemas/abilities.schema.json, data/schemas/classes.schema.json, data/schemas/factions.schema.json, data/schemas/nodes.schema.json, data/schemas/zones.schema.json
+- design/gathering.md
+- src/routes/gathering.ts
+- src/utils/loot.ts
+- tests/gathering.test.ts
 
-**Modified Files** (3):
-- src/app.ts (added route registrations)
-- README.md (updated quickstart)
-- package.json (added @types/pg)
+**Modified Files**:
+- src/app.ts (added gathering route)
+- src/data/gameData.ts (load/validate all core data files)
+- data/items.json (added gathering resources)
+- tests/api.test.ts (gathering validation coverage)
+- docs/API.md (gathering endpoints)
+- docs/IMPLEMENTATION_SUMMARY.md (this file)
+- README.md (gathering quickstart)
+- design/assumptions.md (gathering assumptions)
 
 ### Statistics
-- **Lines of SQL**: ~300
-- **Lines of TypeScript**: ~1,200
-- **API Endpoints**: 20
-- **Database Tables**: 13
-- **Tests**: 9 passing
+- **Lines of SQL**: ~330
+- **Lines of TypeScript**: ~1,350
+- **API Endpoints**: 22
+- **Database Tables**: 15
+- **Tests**: 2 suites updated
 - **Build**: ✅ Successful

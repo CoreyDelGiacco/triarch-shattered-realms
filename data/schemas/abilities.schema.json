@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AbilityDefinitions",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "class_id",
+      "name",
+      "code",
+      "ability_type",
+      "cooldown_seconds",
+      "description",
+      "usage_notes",
+      "damage_modifier",
+      "properties"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "class_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "name": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "code": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 50
+      },
+      "ability_type": {
+        "type": "string",
+        "enum": ["ACTIVE", "ULTIMATE"]
+      },
+      "cooldown_seconds": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "description": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 500
+      },
+      "usage_notes": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 500
+      },
+      "damage_modifier": {
+        "type": "number",
+        "minimum": 0
+      },
+      "properties": {
+        "type": "object"
+      }
+    }
+  }
+}

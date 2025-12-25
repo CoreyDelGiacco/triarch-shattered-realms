@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "class_id": 1,
+    "name": "Shield Slam",
+    "code": "SHIELD_SLAM",
+    "ability_type": "ACTIVE",
+    "cooldown_seconds": 15,
+    "description": "Bash the target with shield, dealing modest damage and stunning for 2 seconds. If the target was casting, interrupts the spell.",
+    "usage_notes": "Bread-and-butter opener to disrupt dangerous foes.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "stun_duration": 2,
+      "interrupts_casting": true
+    }
+  },
+  {
+    "id": 2,
+    "class_id": 1,
+    "name": "Defensive Stance",
+    "code": "DEFENSIVE_STANCE",
+    "ability_type": "ACTIVE",
+    "cooldown_seconds": 20,
+    "description": "Brace for impact, reducing all damage taken by 30% for 6 seconds. Movement is slowed slightly during this stance.",
+    "usage_notes": "Reactive survival tool – time it to survive big enemy hits or focus fire.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "damage_reduction": 0.3,
+      "duration": 6,
+      "movement_penalty": 0.15
+    }
+  },
+  {
+    "id": 3,
+    "class_id": 1,
+    "name": "Shield Wall",
+    "code": "SHIELD_WALL",
+    "ability_type": "ACTIVE",
+    "cooldown_seconds": 60,
+    "description": "Raise a barrier that absorbs damage for all allies in a small radius behind you. For 4 seconds, the Bulwark and any allies immediately behind the shield have 50% of incoming damage absorbed by the Bulwark's health.",
+    "usage_notes": "Critical defensive moment for the entire team. Can be countered by flanking or crowd-controlling the Bulwark.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "damage_redirect": 0.5,
+      "duration": 4,
+      "radius": 5,
+      "debuff": "Shattered Armor"
+    }
+  },
+  {
+    "id": 4,
+    "class_id": 1,
+    "name": "Taunting Shout",
+    "code": "TAUNTING_SHOUT",
+    "ability_type": "ACTIVE",
+    "cooldown_seconds": 25,
+    "description": "Bellow a challenge, forcing nearby PvE enemies to switch aggro for 5 seconds. In PvP, marks up to 3 enemy players with \"Challenged\" debuff – if they attack anyone else, their damage is reduced by 20%.",
+    "usage_notes": "Tactical tool to protect healers or squishy allies.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "pve_duration": 5,
+      "pvp_targets": 3,
+      "pvp_damage_reduction": 0.2,
+      "radius": 8
+    }
+  },
+  {
+    "id": 5,
+    "class_id": 1,
+    "name": "Charging Assault",
+    "code": "CHARGING_ASSAULT",
+    "ability_type": "ACTIVE",
+    "cooldown_seconds": 30,
+    "description": "Rush forward 15 meters with shield first. If you collide with an enemy, knock them back and briefly daze them (1s stun). Any allies in your path get a small speed boost.",
+    "usage_notes": "Engage fights or peel enemies off allies. Requires careful aim.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "range": 15,
+      "knockback": 3,
+      "daze_duration": 1,
+      "ally_speed_boost": 0.15
+    }
+  },
+  {
+    "id": 6,
+    "class_id": 1,
+    "name": "Aegis of the Covenant",
+    "code": "AEGIS_OF_COVENANT",
+    "ability_type": "ULTIMATE",
+    "cooldown_seconds": 90,
+    "description": "Call upon the Iron Covenant's power to become a living bulwark for 8 seconds. Damage taken is halved, every hit blocked heals nearby allies, and gain crowd-control immunity for first 3 seconds.",
+    "usage_notes": "Anchor critical moments – standing ground on a flag while allies rally, or surviving a boss's enraged phase.",
+    "damage_modifier": 1.0,
+    "properties": {
+      "duration": 8,
+      "damage_reduction": 0.5,
+      "cc_immunity_duration": 3,
+      "heal_radius": 10,
+      "debuff": "Exhausted"
+    }
+  }
+]

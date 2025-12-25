@@ -101,6 +101,18 @@ curl -X POST http://localhost:3000/api/inventory/1/remove \
 curl http://localhost:3000/api/inventory/1
 ```
 
+### Gathering Quickstart
+
+```bash
+# List gathering nodes in a zone
+curl http://localhost:3000/api/gathering/nodes/1
+
+# Attempt to gather from a node
+curl -X POST http://localhost:3000/api/gathering/attempt \
+  -H "Content-Type: application/json" \
+  -d '{"character_id":1,"node_code":"COPPER_VEIN","client_position":{"x":112.0,"y":92.0}}'
+```
+
 ### Database
 
 ```bash

@@ -8,6 +8,7 @@ import { createCharactersRouter } from "./routes/characters";
 import { createAuthRouter } from "./routes/auth";
 import { createWorldRouter } from "./routes/world";
 import { createInventoryRouter } from "./routes/inventory";
+import { createGatheringRouter } from "./routes/gathering";
 import { GameData } from "./data/gameData";
 
 export const createApp = (db: Database, gameData: GameData) => {
@@ -33,6 +34,7 @@ export const createApp = (db: Database, gameData: GameData) => {
   app.use("/api/auth", createAuthRouter(db));
   app.use("/api/world", createWorldRouter(db));
   app.use("/api/inventory", createInventoryRouter(db, gameData));
+  app.use("/api/gathering", createGatheringRouter(db, gameData));
 
   return app;
 };
