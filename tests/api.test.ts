@@ -2,10 +2,12 @@ import request from "supertest";
 import { describe, expect, it, beforeEach } from "vitest";
 import { Database } from "../src/db";
 import { createApp } from "../src/app";
+import { loadGameData } from "../src/data/gameData";
 
 const buildApp = () => {
   const db = new Database("postgres://example", true);
-  return createApp(db);
+  const gameData = loadGameData();
+  return createApp(db, gameData);
 };
 
 describe("API Endpoints", () => {
@@ -104,6 +106,71 @@ describe("API Endpoints", () => {
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty("error");
       expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+  });
+
+  describe("POST /api/world/zone-enter", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/world/zone-enter")
+        .send({
+          character_id: "bad",
+          zone_id: null,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("GET /api/world/state/:characterId", () => {
+    it("returns 400 for invalid character id", async () => {
+      const response = await request(app).get("/api/world/state/not-a-number");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("GET /api/inventory/:characterId", () => {
+    it("returns 400 for invalid character id", async () => {
+      const response = await request(app).get("/api/inventory/not-a-number");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("POST /api/inventory/:characterId/add", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/inventory/1/add")
+        .send({
+          item_code: "",
+          quantity: -3,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("POST /api/inventory/:characterId/remove", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/inventory/1/remove")
+        .send({
+          item_code: "NOPE",
+          quantity: 0,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
     });
   });
 });

@@ -1,10 +1,12 @@
 import { loadConfig } from "./config";
 import { Database } from "./db";
 import { createApp } from "./app";
+import { loadGameData } from "./data/gameData";
 
 const config = loadConfig();
 const db = new Database(config.DATABASE_URL, config.SKIP_DB ?? false);
-const app = createApp(db);
+const gameData = loadGameData();
+const app = createApp(db, gameData);
 
 const server = app.listen(config.PORT, () => {
   console.log(`Triarch server listening on :${config.PORT}`);

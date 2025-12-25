@@ -1,0 +1,26 @@
+[
+  {
+    "code": "HEALTH_POTION_SMALL",
+    "name": "Small Health Potion",
+    "description": "Restores a small amount of health on use.",
+    "rarity": "COMMON",
+    "stack_limit": 20,
+    "value": 15
+  },
+  {
+    "code": "IRON_ORE",
+    "name": "Iron Ore",
+    "description": "A chunk of iron ore used in basic crafting recipes.",
+    "rarity": "COMMON",
+    "stack_limit": 50,
+    "value": 5
+  },
+  {
+    "code": "VERDANT_BLOOM",
+    "name": "Verdant Bloom",
+    "description": "A rare herb prized by Verdant Reach alchemists.",
+    "rarity": "RARE",
+    "stack_limit": 10,
+    "value": 120
+  }
+]
