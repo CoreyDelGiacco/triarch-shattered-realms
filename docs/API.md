@@ -283,6 +283,11 @@ Server-authoritative world state for character positions.
 
 Enter a zone and set the character's authoritative position.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Request Body:**
 ```json
 {
@@ -325,6 +330,11 @@ Enter a zone and set the character's authoritative position.
 
 Fetch the current authoritative world state for a character.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Response:**
 ```json
 {
@@ -361,6 +371,11 @@ Server-authoritative character inventory.
 
 Fetch a character's inventory.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Response:**
 ```json
 {
@@ -389,6 +404,11 @@ Fetch a character's inventory.
 ### POST /api/inventory/:characterId/add
 
 Add an item stack to a character's inventory.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Request Body:**
 ```json
@@ -422,6 +442,11 @@ Add an item stack to a character's inventory.
 ### POST /api/inventory/:characterId/remove
 
 Remove quantity from a character's inventory.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Request Body:**
 ```json
@@ -461,6 +486,11 @@ Server-authoritative gathering and resource nodes.
 ### GET /api/gathering/nodes/:zoneId
 
 List available gathering nodes for a zone.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
@@ -503,6 +533,11 @@ List available gathering nodes for a zone.
 ### POST /api/gathering/attempt
 
 Attempt to gather from a node (validated server-side).
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Request Body:**
 ```json
@@ -604,6 +639,11 @@ Player characters with stats, abilities, and skills.
 
 List all characters.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Response:**
 ```json
 [
@@ -630,6 +670,11 @@ List all characters.
 ### GET /api/characters/:id
 
 Get full details of a character including abilities, traits, and skills.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Response:**
 ```json
@@ -684,6 +729,11 @@ Get full details of a character including abilities, traits, and skills.
 
 Create a new character.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Request Body:**
 ```json
 {
@@ -717,6 +767,11 @@ Create a new character.
 ### PATCH /api/characters/:id/stats
 
 Update character stats (Power, Control, Resilience).
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Request Body:**
 ```json
@@ -753,6 +808,11 @@ Update character stats (Power, Control, Resilience).
 
 Assign an ability to a character.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Request Body:**
 ```json
 {
@@ -779,6 +839,11 @@ Assign an ability to a character.
 ### POST /api/characters/:id/traits
 
 Assign a passive trait to a character.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
 
 **Request Body:**
 ```json
@@ -808,6 +873,11 @@ Assign a passive trait to a character.
 
 Update or add a character's skill experience.
 
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
 **Request Body:**
 ```json
 {
@@ -832,6 +902,222 @@ Update or add a character's skill experience.
 **Error Responses:**
 - 400 Bad Request: Missing required fields or invalid skill
 - 404 Not Found: Character not found
+
+---
+
+## Combat
+
+Basic PvE combat against server-controlled NPCs.
+
+### GET /api/combat/npcs/:zoneId
+
+List NPC spawns in a zone.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+{
+  "zone_id": 1,
+  "npcs": [
+    {
+      "id": 1,
+      "code": "TRAINING_DUMMY",
+      "name": "Training Dummy",
+      "zone_id": 1,
+      "position": { "x": 108, "y": 96 },
+      "current_hp": 120,
+      "max_hp": 120,
+      "base_damage": 6,
+      "respawn_seconds": 60,
+      "is_alive": true
+    }
+  ],
+  "server_time": "2024-01-01T00:00:00.000Z"
+}
+```
+
+### POST /api/combat/attack
+
+Attack an NPC with optional ability.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{
+  "character_id": 1,
+  "npc_id": 1,
+  "ability_code": "SHIELD_SLAM"
+}
+```
+
+**Response:**
+```json
+{
+  "character": {
+    "id": 1,
+    "current_hp": 112,
+    "max_hp": 120,
+    "is_dead": false
+  },
+  "npc": {
+    "id": 1,
+    "code": "TRAINING_DUMMY",
+    "name": "Training Dummy",
+    "current_hp": 90,
+    "max_hp": 120,
+    "is_alive": true
+  },
+  "damage": 30,
+  "retaliated_damage": 6,
+  "death": null,
+  "server_time": "2024-01-01T00:00:00.000Z"
+}
+```
+
+### POST /api/combat/revive
+
+Revive a dead character to full HP.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{ "character_id": 1 }
+```
+
+---
+
+## Loot
+
+Loot containers created from death drops.
+
+### GET /api/loot/containers/:characterId
+
+List loot containers in the character's current zone.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "zone_id": 2,
+  "containers": [
+    {
+      "id": 1,
+      "zone_id": 2,
+      "position": { "x": 120, "y": 88 },
+      "owner_character_id": 1,
+      "items": [
+        {
+          "item_code": "IRON_ORE",
+          "quantity": 3,
+          "item": { "code": "IRON_ORE", "name": "Iron Ore" }
+        }
+      ],
+      "created_at": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}
+```
+
+### POST /api/loot/containers/:containerId/claim
+
+Claim a loot container and move items into inventory.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{ "character_id": 1 }
+```
+
+---
+
+## Reputation
+
+Faction reputation per character.
+
+### GET /api/reputation/:characterId
+
+Fetch current reputation values.
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "reputation": [
+    {
+      "faction": { "id": 1, "name": "Iron Covenant", "code": "IRON_COVENANT" },
+      "value": 500
+    }
+  ]
+}
+```
+
+---
+
+## Betrayal
+
+Faction switching questline (server-authoritative).
+
+### GET /api/betrayal/status/:characterId
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+### POST /api/betrayal/start
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{
+  "character_id": 1,
+  "target_faction_id": 2
+}
+```
+
+### POST /api/betrayal/advance
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Request Body:**
+```json
+{
+  "character_id": 1
+}
+```
 
 ---
 

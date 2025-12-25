@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Triarch: Shattered Realms - Playtest Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Triarch: Shattered Realms</h1>
+      <p class="subtitle">Playtest Console (Server-Authoritative Vertical Slice)</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>1. Auth</h2>
+        <div class="grid">
+          <div>
+            <h3>Register</h3>
+            <label>Email <input id="registerEmail" type="email" /></label>
+            <label>Password <input id="registerPassword" type="password" /></label>
+            <label>Display Name <input id="registerDisplay" type="text" /></label>
+            <button id="registerBtn">Register</button>
+          </div>
+          <div>
+            <h3>Login</h3>
+            <label>Email <input id="loginEmail" type="email" /></label>
+            <label>Password <input id="loginPassword" type="password" /></label>
+            <button id="loginBtn">Login</button>
+            <div class="pill">Token: <span id="tokenPreview">not set</span></div>
+            <button class="secondary" id="clearTokenBtn">Clear Token</button>
+          </div>
+        </div>
+        <pre id="authOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>2. Reference Data</h2>
+        <div class="grid">
+          <div>
+            <button id="loadReferenceBtn">Load Factions, Classes, Skills, Zones</button>
+            <p class="helper">Use this before creating characters to populate dropdowns.</p>
+          </div>
+        </div>
+        <pre id="referenceOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>3. Characters</h2>
+        <div class="grid">
+          <div>
+            <h3>Create Character</h3>
+            <label>Name <input id="characterName" type="text" /></label>
+            <label>Faction
+              <select id="characterFaction"></select>
+            </label>
+            <label>Class
+              <select id="characterClass"></select>
+            </label>
+            <button id="createCharacterBtn">Create</button>
+          </div>
+          <div>
+            <h3>Your Characters</h3>
+            <button id="listCharactersBtn">Refresh</button>
+            <label>Selected Character
+              <select id="selectedCharacter"></select>
+            </label>
+          </div>
+        </div>
+        <pre id="charactersOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>4. Character Setup</h2>
+        <div class="grid">
+          <div>
+            <h3>Train Skill</h3>
+            <label>Skill
+              <select id="skillSelect"></select>
+            </label>
+            <label>Experience Gained <input id="skillExp" type="number" value="500" /></label>
+            <button id="trainSkillBtn">Train Skill</button>
+          </div>
+          <div>
+            <h3>Assign Ability</h3>
+            <label>Ability
+              <select id="abilitySelect"></select>
+            </label>
+            <button id="assignAbilityBtn">Assign Ability</button>
+          </div>
+        </div>
+        <pre id="setupOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>5. World</h2>
+        <div class="grid">
+          <div>
+            <h3>Enter Zone</h3>
+            <label>Zone
+              <select id="zoneId"></select>
+            </label>
+            <label>Position X <input id="positionX" type="number" value="100" /></label>
+            <label>Position Y <input id="positionY" type="number" value="100" /></label>
+            <button id="zoneEnterBtn">Enter</button>
+          </div>
+          <div>
+            <h3>World State</h3>
+            <button id="worldStateBtn">Refresh</button>
+          </div>
+        </div>
+        <pre id="worldOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>6. Inventory</h2>
+        <div class="grid">
+          <div>
+            <h3>View Inventory</h3>
+            <button id="inventoryBtn">Fetch Inventory</button>
+          </div>
+          <div>
+            <h3>Add Item</h3>
+            <label>Item Code <input id="addItemCode" type="text" value="IRON_ORE" /></label>
+            <label>Quantity <input id="addItemQty" type="number" value="5" /></label>
+            <button id="addItemBtn">Add Item</button>
+          </div>
+          <div>
+            <h3>Remove Item</h3>
+            <label>Item Code <input id="removeItemCode" type="text" value="IRON_ORE" /></label>
+            <label>Quantity <input id="removeItemQty" type="number" value="1" /></label>
+            <button id="removeItemBtn">Remove Item</button>
+          </div>
+        </div>
+        <pre id="inventoryOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>7. Gathering</h2>
+        <div class="grid">
+          <div>
+            <h3>List Nodes</h3>
+            <button id="listNodesBtn">Fetch Nodes</button>
+            <label>Node
+              <select id="nodeCode"></select>
+            </label>
+          </div>
+          <div>
+            <h3>Gather Attempt</h3>
+            <label>Client X <input id="clientX" type="number" value="112" /></label>
+            <label>Client Y <input id="clientY" type="number" value="92" /></label>
+            <button id="gatherBtn">Gather</button>
+          </div>
+        </div>
+        <pre id="gatheringOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>8. Combat</h2>
+        <div class="grid">
+          <div>
+            <h3>NPC List</h3>
+            <button id="listNpcBtn">Fetch NPCs</button>
+            <label>NPC
+              <select id="npcId"></select>
+            </label>
+          </div>
+          <div>
+            <h3>Attack</h3>
+            <label>Ability Code (optional)
+              <select id="abilityCode"></select>
+            </label>
+            <button id="attackBtn">Attack</button>
+          </div>
+          <div>
+            <h3>Revive</h3>
+            <button id="reviveBtn">Revive</button>
+          </div>
+        </div>
+        <pre id="combatOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>9. Loot</h2>
+        <div class="grid">
+          <div>
+            <h3>List Containers</h3>
+            <button id="listLootBtn">Fetch Containers</button>
+            <label>Container
+              <select id="containerId"></select>
+            </label>
+          </div>
+          <div>
+            <h3>Claim Container</h3>
+            <button id="claimLootBtn">Claim</button>
+          </div>
+        </div>
+        <pre id="lootOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>10. Betrayal</h2>
+        <div class="grid">
+          <div>
+            <h3>Start Betrayal</h3>
+            <label>Target Faction
+              <select id="betrayalTarget"></select>
+            </label>
+            <button id="betrayalStartBtn">Start</button>
+          </div>
+          <div>
+            <h3>Advance Step</h3>
+            <button id="betrayalAdvanceBtn">Advance</button>
+          </div>
+          <div>
+            <h3>Status</h3>
+            <button id="betrayalStatusBtn">Refresh</button>
+          </div>
+        </div>
+        <pre id="betrayalOutput"></pre>
+      </section>
+
+      <section class="card">
+        <h2>11. Reputation</h2>
+        <button id="reputationBtn">Fetch Reputation</button>
+        <pre id="reputationOutput"></pre>
+      </section>
+    </main>
+
+    <footer>
+      <p>Server authoritative checks: zone, range, cooldowns, ownership, and loot rules.</p>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

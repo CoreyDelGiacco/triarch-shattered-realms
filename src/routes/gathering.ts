@@ -5,6 +5,9 @@ import { createRateLimiter } from "../middleware/rateLimit";
 import { Character, CharacterPosition } from "../types";
 import { GameData, ResourceNodeDefinition } from "../data/gameData";
 import { selectWeightedLoot } from "../utils/loot";
+import { sendError } from "../utils/errors";
+import { logSuspiciousAction } from "../utils/securityLog";
+import { requireSession } from "../middleware/auth";
 
 const nodeParamsSchema = z.object({
   zoneId: z.coerce.number().int().positive(),
@@ -21,42 +24,21 @@ const gatherAttemptSchema = z.object({
     .optional(),
 });
 
-const sendError = (
-  res: Response,
-  status: number,
-  code: string,
-  message: string,
-  details?: Record<string, string[]>
-) => {
-  res.status(status).json({
-    error: {
-      code,
-      message,
-      details,
-    },
-  });
-};
-
 const parseNumeric = (value: number | string) => Number(value);
 
-const getRequestIp = (req: Request) => {
-  const forwarded = req.headers["x-forwarded-for"];
-  if (typeof forwarded === "string") {
-    return forwarded.split(",")[0].trim();
-  }
-  if (Array.isArray(forwarded)) {
-    return forwarded[0];
-  }
-  return req.ip;
-};
-
-const logSuspicious = (req: Request, characterId: number, node: ResourceNodeDefinition, reason: string) => {
-  console.warn("Suspicious gathering action", {
+const logGatheringSuspicious = (
+  req: Request,
+  playerId: number,
+  characterId: number,
+  node: ResourceNodeDefinition,
+  reason: string
+) => {
+  logSuspiciousAction(req, {
+    player_id: playerId,
     character_id: characterId,
-    node_code: node.code,
     zone_id: node.zone_id,
+    action: "GATHERING",
     reason,
-    ip: getRequestIp(req),
   });
 };
 
@@ -64,6 +46,8 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
   const router = Router();
 
   const gatherLimiter = createRateLimiter({ windowMs: 30_000, max: 15 });
+
+  router.use(requireSession(db));
 
   router.get("/nodes/:zoneId", (req: Request, res: Response) => {
     const parsed = nodeParamsSchema.safeParse(req.params);
@@ -113,14 +97,15 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const client = await pool.connect();
 
       try {
         await client.query("BEGIN");
 
         const characterResult = await client.query<Character>(
-          "SELECT id FROM characters WHERE id = $1",
-          [character_id]
+          "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+          [character_id, player.id]
         );
         if (characterResult.rows.length === 0) {
           await client.query("ROLLBACK");
@@ -150,13 +135,13 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
             client_position.y - serverPosition.y
           );
           if (mismatch > 15) {
-            logSuspicious(req, character_id, node, "CLIENT_POSITION_DESYNC");
+            logGatheringSuspicious(req, player.id, character_id, node, "CLIENT_POSITION_DESYNC");
           }
         }
 
         if (position.zone_id !== node.zone_id) {
           await client.query("ROLLBACK");
-          logSuspicious(req, character_id, node, "ZONE_MISMATCH");
+          logGatheringSuspicious(req, player.id, character_id, node, "ZONE_MISMATCH");
           sendError(res, 400, "INVALID_ZONE", "Character is not in the same zone as the node.");
           return;
         }
@@ -168,7 +153,7 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
 
         if (distance > node.interaction_radius) {
           await client.query("ROLLBACK");
-          logSuspicious(req, character_id, node, "OUT_OF_RANGE");
+          logGatheringSuspicious(req, player.id, character_id, node, "OUT_OF_RANGE");
           sendError(res, 400, "OUT_OF_RANGE", "Character is too far from the node.");
           return;
         }
@@ -203,7 +188,7 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
         const nextAvailableAt = cooldownResult.rows[0]?.next_available_at;
         if (nextAvailableAt && now < nextAvailableAt) {
           await client.query("ROLLBACK");
-          logSuspicious(req, character_id, node, "COOLDOWN_ACTIVE");
+          logGatheringSuspicious(req, player.id, character_id, node, "COOLDOWN_ACTIVE");
           sendError(res, 400, "NODE_COOLDOWN", "Node is still on cooldown.");
           return;
         }
@@ -273,7 +258,7 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
             quantity: loot.quantity,
           },
           next_available_at: nextTime.toISOString(),
-          server_time: now.toISOString(),
+          server_time: new Date().toISOString(),
         });
       } catch (error) {
         await client.query("ROLLBACK");
@@ -282,8 +267,8 @@ export const createGatheringRouter = (db: Database, gameData: GameData) => {
         client.release();
       }
     } catch (error) {
-      console.error("Error processing gathering attempt:", error);
-      sendError(res, 500, "INTERNAL_ERROR", "Failed to process gathering attempt.");
+      console.error("Error gathering:", error);
+      sendError(res, 500, "INTERNAL_ERROR", "Failed to gather resources.");
     }
   });
 

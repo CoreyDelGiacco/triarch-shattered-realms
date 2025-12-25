@@ -10,6 +10,13 @@ export interface LootSelection {
   quantity: number;
 }
 
+export interface InventoryStack {
+  item_code: string;
+  quantity: number;
+}
+
+export type DeathLootRule = "NONE" | "PARTIAL" | "FULL";
+
 export const createSeededRandom = (seed: number) => {
   let state = seed >>> 0;
   return () => {
@@ -50,4 +57,38 @@ export const selectWeightedLoot = (
     item_code: selected.item_code,
     quantity,
   };
+};
+
+export const calculateDeathDrops = (
+  inventory: InventoryStack[],
+  rule: DeathLootRule
+): { dropped: InventoryStack[]; remaining: InventoryStack[] } => {
+  if (rule === "NONE") {
+    return {
+      dropped: [],
+      remaining: inventory.map((stack) => ({ ...stack })),
+    };
+  }
+
+  const dropped: InventoryStack[] = [];
+  const remaining: InventoryStack[] = [];
+
+  for (const stack of inventory) {
+    if (rule === "FULL") {
+      dropped.push({ ...stack });
+      continue;
+    }
+
+    const dropQuantity = Math.floor(stack.quantity / 2);
+    const keepQuantity = stack.quantity - dropQuantity;
+
+    if (dropQuantity > 0) {
+      dropped.push({ item_code: stack.item_code, quantity: dropQuantity });
+    }
+    if (keepQuantity > 0) {
+      remaining.push({ item_code: stack.item_code, quantity: keepQuantity });
+    }
+  }
+
+  return { dropped, remaining };
 };

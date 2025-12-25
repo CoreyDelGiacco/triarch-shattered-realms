@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "node:path";
 import { Database } from "./db";
 import { createFactionsRouter } from "./routes/factions";
 import { createClassesRouter } from "./routes/classes";
@@ -9,11 +10,18 @@ import { createAuthRouter } from "./routes/auth";
 import { createWorldRouter } from "./routes/world";
 import { createInventoryRouter } from "./routes/inventory";
 import { createGatheringRouter } from "./routes/gathering";
+import { createCombatRouter } from "./routes/combat";
+import { createLootRouter } from "./routes/loot";
+import { createBetrayalRouter } from "./routes/betrayal";
+import { createReputationRouter } from "./routes/reputation";
 import { GameData } from "./data/gameData";
 
 export const createApp = (db: Database, gameData: GameData) => {
   const app = express();
   app.use(express.json());
+
+  const publicDir = path.resolve(process.cwd(), "public");
+  app.use(express.static(publicDir));
 
   app.get("/health", async (_req: Request, res: Response) => {
     const dbStatus = await db.connect();
@@ -35,6 +43,10 @@ export const createApp = (db: Database, gameData: GameData) => {
   app.use("/api/world", createWorldRouter(db));
   app.use("/api/inventory", createInventoryRouter(db, gameData));
   app.use("/api/gathering", createGatheringRouter(db, gameData));
+  app.use("/api/combat", createCombatRouter(db));
+  app.use("/api/loot", createLootRouter(db, gameData));
+  app.use("/api/betrayal", createBetrayalRouter(db));
+  app.use("/api/reputation", createReputationRouter(db));
 
   return app;
 };
