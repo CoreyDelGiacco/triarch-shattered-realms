@@ -53,21 +53,6 @@ describe("API Endpoints", () => {
     });
   });
 
-  describe("POST /api/characters", () => {
-    it("returns 500 when database is disabled", async () => {
-      const response = await request(app)
-        .post("/api/characters")
-        .send({
-          name: "TestCharacter",
-          faction_id: 1,
-          class_id: 1,
-        });
-
-      expect(response.status).toBe(500);
-      expect(response.body).toHaveProperty("error");
-    });
-  });
-
   describe("POST /api/auth/register", () => {
     it("returns 400 for invalid payload", async () => {
       const response = await request(app)
@@ -109,93 +94,75 @@ describe("API Endpoints", () => {
     });
   });
 
-  describe("POST /api/world/zone-enter", () => {
-    it("returns 400 for invalid payload", async () => {
+  describe("Protected routes", () => {
+    it("returns 401 for missing token on /api/characters", async () => {
+      const response = await request(app).get("/api/characters");
+
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+
+    it("returns 401 for missing token on /api/world/zone-enter", async () => {
       const response = await request(app)
         .post("/api/world/zone-enter")
         .send({
-          character_id: "bad",
-          zone_id: null,
+          character_id: 1,
+          zone_id: 1,
+          position: { x: 1, y: 1 },
         });
 
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
     });
-  });
 
-  describe("GET /api/world/state/:characterId", () => {
-    it("returns 400 for invalid character id", async () => {
-      const response = await request(app).get("/api/world/state/not-a-number");
+    it("returns 401 for missing token on /api/inventory", async () => {
+      const response = await request(app).get("/api/inventory/1");
 
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
     });
-  });
 
-  describe("GET /api/inventory/:characterId", () => {
-    it("returns 400 for invalid character id", async () => {
-      const response = await request(app).get("/api/inventory/not-a-number");
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
-    });
-  });
-
-  describe("POST /api/inventory/:characterId/add", () => {
-    it("returns 400 for invalid payload", async () => {
-      const response = await request(app)
-        .post("/api/inventory/1/add")
-        .send({
-          item_code: "",
-          quantity: -3,
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
-    });
-  });
-
-  describe("POST /api/inventory/:characterId/remove", () => {
-    it("returns 400 for invalid payload", async () => {
-      const response = await request(app)
-        .post("/api/inventory/1/remove")
-        .send({
-          item_code: "NOPE",
-          quantity: 0,
-        });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
-    });
-  });
-
-  describe("GET /api/gathering/nodes/:zoneId", () => {
-    it("returns 400 for invalid zone id", async () => {
-      const response = await request(app).get("/api/gathering/nodes/not-a-number");
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
-    });
-  });
-
-  describe("POST /api/gathering/attempt", () => {
-    it("returns 400 for invalid payload", async () => {
+    it("returns 401 for missing token on /api/gathering/attempt", async () => {
       const response = await request(app)
         .post("/api/gathering/attempt")
         .send({
-          character_id: "bad",
-          node_code: "",
+          character_id: 1,
+          node_code: "COPPER_VEIN",
         });
 
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error");
-      expect(response.body.error.code).toBe("INVALID_INPUT");
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+
+    it("returns 401 for missing token on /api/combat/attack", async () => {
+      const response = await request(app)
+        .post("/api/combat/attack")
+        .send({
+          character_id: 1,
+          npc_id: 1,
+        });
+
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+
+    it("returns 401 for missing token on /api/loot/containers", async () => {
+      const response = await request(app).get("/api/loot/containers/1");
+
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
+    });
+
+    it("returns 401 for missing token on /api/betrayal/start", async () => {
+      const response = await request(app)
+        .post("/api/betrayal/start")
+        .send({
+          character_id: 1,
+          target_faction_id: 2,
+        });
+
+      expect(response.status).toBe(401);
+      expect(response.body.error.code).toBe("UNAUTHORIZED");
     });
   });
 });

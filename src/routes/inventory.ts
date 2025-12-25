@@ -4,6 +4,8 @@ import { Database } from "../db";
 import { createRateLimiter } from "../middleware/rateLimit";
 import { Character } from "../types";
 import { GameData } from "../data/gameData";
+import { sendError } from "../utils/errors";
+import { requireSession } from "../middleware/auth";
 
 const inventoryParamsSchema = z.object({
   characterId: z.coerce.number().int().positive(),
@@ -14,26 +16,25 @@ const inventoryMutationSchema = z.object({
   quantity: z.number().int().positive().max(9999),
 });
 
-const sendError = (
-  res: Response,
-  status: number,
-  code: string,
-  message: string,
-  details?: Record<string, string[]>
-) => {
-  res.status(status).json({
-    error: {
-      code,
-      message,
-      details,
-    },
-  });
-};
-
 export const createInventoryRouter = (db: Database, gameData: GameData) => {
   const router = Router();
 
   const mutateLimiter = createRateLimiter({ windowMs: 30_000, max: 20 });
+
+  router.use(requireSession(db));
+
+  const ensureOwnership = async (res: Response, characterId: number, playerId: number) => {
+    const pool = db.getPool();
+    const characterResult = await pool.query<Character>(
+      "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+      [characterId, playerId]
+    );
+    if (characterResult.rows.length === 0) {
+      sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");
+      return false;
+    }
+    return true;
+  };
 
   router.get("/:characterId", async (req: Request, res: Response) => {
     const parsed = inventoryParamsSchema.safeParse(req.params);
@@ -44,14 +45,11 @@ export const createInventoryRouter = (db: Database, gameData: GameData) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const characterId = parsed.data.characterId;
 
-      const characterResult = await pool.query<Character>(
-        "SELECT id FROM characters WHERE id = $1",
-        [characterId]
-      );
-      if (characterResult.rows.length === 0) {
-        sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");
+      const ok = await ensureOwnership(res, characterId, player.id);
+      if (!ok) {
         return;
       }
 
@@ -109,16 +107,17 @@ export const createInventoryRouter = (db: Database, gameData: GameData) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const client = await pool.connect();
 
       try {
         await client.query("BEGIN");
 
-        const characterResult = await client.query<Character>(
-          "SELECT id FROM characters WHERE id = $1",
-          [characterId]
+        const owned = await client.query<Character>(
+          "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+          [characterId, player.id]
         );
-        if (characterResult.rows.length === 0) {
+        if (owned.rows.length === 0) {
           await client.query("ROLLBACK");
           sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");
           return;
@@ -200,16 +199,17 @@ export const createInventoryRouter = (db: Database, gameData: GameData) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const client = await pool.connect();
 
       try {
         await client.query("BEGIN");
 
-        const characterResult = await client.query<Character>(
-          "SELECT id FROM characters WHERE id = $1",
-          [characterId]
+        const owned = await client.query<Character>(
+          "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+          [characterId, player.id]
         );
-        if (characterResult.rows.length === 0) {
+        if (owned.rows.length === 0) {
           await client.query("ROLLBACK");
           sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");
           return;

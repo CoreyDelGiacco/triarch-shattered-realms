@@ -3,6 +3,8 @@ import { z } from "zod";
 import { Database } from "../db";
 import { createRateLimiter } from "../middleware/rateLimit";
 import { Character, CharacterPosition, Zone } from "../types";
+import { sendError } from "../utils/errors";
+import { requireSession } from "../middleware/auth";
 
 const zoneEnterSchema = z.object({
   character_id: z.number().int().positive(),
@@ -17,28 +19,14 @@ const worldStateParamsSchema = z.object({
   characterId: z.coerce.number().int().positive(),
 });
 
-const sendError = (
-  res: Response,
-  status: number,
-  code: string,
-  message: string,
-  details?: Record<string, string[]>
-) => {
-  res.status(status).json({
-    error: {
-      code,
-      message,
-      details,
-    },
-  });
-};
-
 const parseNumeric = (value: number | string) => Number(value);
 
 export const createWorldRouter = (db: Database) => {
   const router = Router();
 
   const zoneEnterLimiter = createRateLimiter({ windowMs: 30_000, max: 20 });
+
+  router.use(requireSession(db));
 
   router.post("/zone-enter", zoneEnterLimiter, async (req: Request, res: Response) => {
     const parsed = zoneEnterSchema.safeParse(req.body);
@@ -49,11 +37,12 @@ export const createWorldRouter = (db: Database) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const { character_id, zone_id, position } = parsed.data;
 
       const characterResult = await pool.query<Character>(
-        "SELECT id FROM characters WHERE id = $1",
-        [character_id]
+        "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+        [character_id, player.id]
       );
       if (characterResult.rows.length === 0) {
         sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");
@@ -108,11 +97,12 @@ export const createWorldRouter = (db: Database) => {
 
     try {
       const pool = db.getPool();
+      const player = res.locals.player as { id: number };
       const characterId = parsed.data.characterId;
 
       const characterResult = await pool.query<Character>(
-        "SELECT id FROM characters WHERE id = $1",
-        [characterId]
+        "SELECT id FROM characters WHERE id = $1 AND player_id = $2",
+        [characterId, player.id]
       );
       if (characterResult.rows.length === 0) {
         sendError(res, 404, "CHARACTER_NOT_FOUND", "Character not found.");

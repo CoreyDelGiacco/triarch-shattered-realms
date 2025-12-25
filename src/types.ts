@@ -37,6 +37,7 @@ export interface Zone {
 
 export interface Character {
   id: number;
+  player_id: number;
   name: string;
   faction_id: number;
   class_id: number;
@@ -54,6 +55,14 @@ export interface CharacterPosition {
   zone_id: number;
   position_x: number | string;
   position_y: number | string;
+  updated_at: Date;
+}
+
+export interface CharacterState {
+  character_id: number;
+  current_hp: number;
+  max_hp: number;
+  is_dead: boolean;
   updated_at: Date;
 }
 
@@ -152,6 +161,72 @@ export interface CharacterSkill {
 export interface SkillWithLevel extends Skill {
   current_level: number;
   experience: number;
+}
+
+export interface NpcTemplate {
+  id: number;
+  code: string;
+  name: string;
+  base_hp: number;
+  base_damage: number;
+  created_at: Date;
+}
+
+export interface NpcSpawn {
+  id: number;
+  template_id: number;
+  zone_id: number;
+  position_x: number | string;
+  position_y: number | string;
+  current_hp: number;
+  respawn_seconds: number;
+  last_defeated_at: Date | null;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface CharacterAbilityCooldown {
+  character_id: number;
+  ability_id: number;
+  last_used_at: Date;
+  updated_at: Date;
+}
+
+export interface LootContainer {
+  id: number;
+  zone_id: number;
+  position_x: number | string;
+  position_y: number | string;
+  owner_character_id: number | null;
+  created_at: Date;
+}
+
+export interface LootContainerItem {
+  id: number;
+  container_id: number;
+  item_code: string;
+  quantity: number;
+  created_at: Date;
+}
+
+export interface CharacterReputation {
+  character_id: number;
+  faction_id: number;
+  value: number;
+  updated_at: Date;
+}
+
+export type BetrayalStatus = "IN_PROGRESS" | "COMPLETED" | "FAILED";
+export type BetrayalStep = "RENOUNCE" | "PROVE" | "COMPLETE";
+
+export interface BetrayalQuest {
+  id: number;
+  character_id: number;
+  target_faction_id: number;
+  current_step: BetrayalStep;
+  status: BetrayalStatus;
+  started_at: Date;
+  updated_at: Date;
 }
 
 // Request/Response types for API
