@@ -454,6 +454,103 @@ Remove quantity from a character's inventory.
 
 ---
 
+## Gathering
+
+Server-authoritative gathering and resource nodes.
+
+### GET /api/gathering/nodes/:zoneId
+
+List available gathering nodes for a zone.
+
+**Response:**
+```json
+{
+  "zone_id": 1,
+  "nodes": [
+    {
+      "code": "COPPER_VEIN",
+      "name": "Copper Vein",
+      "skill_code": "MINING",
+      "zone_id": 1,
+      "position": { "x": 112.4, "y": 92.8 },
+      "interaction_radius": 8,
+      "cooldown_seconds": 60,
+      "min_skill_level": 1,
+      "loot_table": [
+        {
+          "item_code": "COPPER_ORE",
+          "min_quantity": 1,
+          "max_quantity": 3,
+          "weight": 65,
+          "item": {
+            "code": "COPPER_ORE",
+            "name": "Copper Ore",
+            "description": "Soft copper ore suitable for starter smithing recipes.",
+            "rarity": "COMMON",
+            "stack_limit": 50,
+            "value": 4
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid zone id
+
+### POST /api/gathering/attempt
+
+Attempt to gather from a node (validated server-side).
+
+**Request Body:**
+```json
+{
+  "character_id": 1,
+  "node_code": "COPPER_VEIN",
+  "client_position": { "x": 112.0, "y": 92.0 }
+}
+```
+
+**Response:** 201 Created
+```json
+{
+  "character_id": 1,
+  "node": {
+    "code": "COPPER_VEIN",
+    "name": "Copper Vein",
+    "zone_id": 1,
+    "skill_code": "MINING",
+    "position": { "x": 112.4, "y": 92.8 },
+    "interaction_radius": 8,
+    "cooldown_seconds": 60,
+    "min_skill_level": 1
+  },
+  "loot": {
+    "item": {
+      "code": "COPPER_ORE",
+      "name": "Copper Ore",
+      "description": "Soft copper ore suitable for starter smithing recipes.",
+      "rarity": "COMMON",
+      "stack_limit": 50,
+      "value": 4
+    },
+    "item_code": "COPPER_ORE",
+    "quantity": 2
+  },
+  "next_available_at": "2024-01-01T00:01:00.000Z",
+  "server_time": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload, zone mismatch, out of range, cooldown active, or skill too low
+- 404 Not Found: Character not found, node not found, or character not in world
+- 500 Internal Server Error: Loot item definition missing
+
+---
+
 ## Skills
 
 Gathering and crafting skills (life skills).

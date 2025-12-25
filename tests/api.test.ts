@@ -173,4 +173,29 @@ describe("API Endpoints", () => {
       expect(response.body.error.code).toBe("INVALID_INPUT");
     });
   });
+
+  describe("GET /api/gathering/nodes/:zoneId", () => {
+    it("returns 400 for invalid zone id", async () => {
+      const response = await request(app).get("/api/gathering/nodes/not-a-number");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
+
+  describe("POST /api/gathering/attempt", () => {
+    it("returns 400 for invalid payload", async () => {
+      const response = await request(app)
+        .post("/api/gathering/attempt")
+        .send({
+          character_id: "bad",
+          node_code: "",
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
+      expect(response.body.error.code).toBe("INVALID_INPUT");
+    });
+  });
 });

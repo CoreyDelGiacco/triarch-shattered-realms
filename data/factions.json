@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Iron Covenant",
+    "code": "IRON_COVENANT",
+    "philosophy": "Order/Industry",
+    "description": "Values heavy armor and siege warfare. The Iron Covenant embodies discipline, defense, and industrial might through fortifications and defensive capabilities."
+  },
+  {
+    "id": 2,
+    "name": "Verdant Reach",
+    "code": "VERDANT_REACH",
+    "philosophy": "Nature/Magic",
+    "description": "Emphasizes mobility and PvE advantages. The Verdant Reach represents harmony with nature and magical prowess, offering agility and environmental advantages."
+  },
+  {
+    "id": 3,
+    "name": "Abyssal Remnant",
+    "code": "ABYSSAL_REMNANT",
+    "philosophy": "Chaos/Void",
+    "description": "Thrives on risky power and self-damaging magic. The Abyssal Remnant pursues power through sacrifice and void manipulation with high-risk, high-reward abilities."
+  }
+]

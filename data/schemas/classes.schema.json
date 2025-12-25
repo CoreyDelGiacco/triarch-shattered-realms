@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClassDefinitions",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "name",
+      "code",
+      "faction_id",
+      "role",
+      "description",
+      "playstyle"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "name": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "code": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 50
+      },
+      "faction_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "role": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 50
+      },
+      "description": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 500
+      },
+      "playstyle": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 800
+      }
+    }
+  }
+}

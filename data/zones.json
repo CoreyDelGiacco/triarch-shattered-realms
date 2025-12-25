@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Covenant Heartlands",
+    "risk_level": "SAFE",
+    "pvp_enabled": false,
+    "loot_drop_on_death": "NONE",
+    "description": "The protected core territories of the Iron Covenant. Ideal for story quests, crafting, and casual play with no PvP or loot drop.",
+    "resource_tier": "COMMON"
+  },
+  {
+    "id": 2,
+    "name": "Contested Borderlands",
+    "risk_level": "CONTESTED",
+    "pvp_enabled": true,
+    "loot_drop_on_death": "PARTIAL",
+    "description": "Disputed territories where open PvP is enabled. Defeated players lose a few items or resources. Mid-tier resources and rewards available.",
+    "resource_tier": "MID_TIER"
+  },
+  {
+    "id": 3,
+    "name": "The Shattered Wastes",
+    "risk_level": "HIGH_RISK",
+    "pvp_enabled": true,
+    "loot_drop_on_death": "FULL",
+    "description": "Lawless full-loot PvP areas. If you die, everything you're carrying can be looted. Contains the richest rewards including rare resources, relics, and powerful bosses.",
+    "resource_tier": "EXOTIC"
+  }
+]
