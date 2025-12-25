@@ -275,6 +275,185 @@ Get details of a specific zone.
 
 ---
 
+## World
+
+Server-authoritative world state for character positions.
+
+### POST /api/world/zone-enter
+
+Enter a zone and set the character's authoritative position.
+
+**Request Body:**
+```json
+{
+  "character_id": 1,
+  "zone_id": 2,
+  "position": {
+    "x": 120.5,
+    "y": 88.25
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "zone": {
+    "id": 2,
+    "name": "Verdant Outskirts",
+    "risk_level": "CONTESTED",
+    "pvp_enabled": true,
+    "loot_drop_on_death": "PARTIAL",
+    "description": "A contested borderland...",
+    "resource_tier": "MID_TIER",
+    "created_at": "2024-01-01T00:00:00.000Z"
+  },
+  "position": {
+    "x": 120.5,
+    "y": 88.25
+  },
+  "updated_at": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload
+- 404 Not Found: Character or zone not found
+
+### GET /api/world/state/:characterId
+
+Fetch the current authoritative world state for a character.
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "zone": {
+    "id": 2,
+    "name": "Verdant Outskirts",
+    "risk_level": "CONTESTED",
+    "pvp_enabled": true,
+    "loot_drop_on_death": "PARTIAL",
+    "description": "A contested borderland...",
+    "resource_tier": "MID_TIER"
+  },
+  "position": {
+    "x": 120.5,
+    "y": 88.25
+  },
+  "updated_at": "2024-01-01T00:00:00.000Z",
+  "server_time": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid character id
+- 404 Not Found: Character not found or has no world state
+
+---
+
+## Inventory
+
+Server-authoritative character inventory.
+
+### GET /api/inventory/:characterId
+
+Fetch a character's inventory.
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "items": [
+    {
+      "item": {
+        "code": "IRON_ORE",
+        "name": "Iron Ore",
+        "description": "A chunk of iron ore used in basic crafting recipes.",
+        "rarity": "COMMON",
+        "stack_limit": 50,
+        "value": 5
+      },
+      "item_code": "IRON_ORE",
+      "quantity": 12
+    }
+  ]
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid character id
+- 404 Not Found: Character not found
+
+### POST /api/inventory/:characterId/add
+
+Add an item stack to a character's inventory.
+
+**Request Body:**
+```json
+{
+  "item_code": "IRON_ORE",
+  "quantity": 5
+}
+```
+
+**Response:** 201 Created
+```json
+{
+  "character_id": 1,
+  "item": {
+    "code": "IRON_ORE",
+    "name": "Iron Ore",
+    "description": "A chunk of iron ore used in basic crafting recipes.",
+    "rarity": "COMMON",
+    "stack_limit": 50,
+    "value": 5
+  },
+  "item_code": "IRON_ORE",
+  "quantity": 17
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload or stack limit exceeded
+- 404 Not Found: Character or item not found
+
+### POST /api/inventory/:characterId/remove
+
+Remove quantity from a character's inventory.
+
+**Request Body:**
+```json
+{
+  "item_code": "IRON_ORE",
+  "quantity": 5
+}
+```
+
+**Response:**
+```json
+{
+  "character_id": 1,
+  "item": {
+    "code": "IRON_ORE",
+    "name": "Iron Ore",
+    "description": "A chunk of iron ore used in basic crafting recipes.",
+    "rarity": "COMMON",
+    "stack_limit": 50,
+    "value": 5
+  },
+  "item_code": "IRON_ORE",
+  "quantity": 12
+}
+```
+
+**Error Responses:**
+- 400 Bad Request: Invalid payload or insufficient quantity
+- 404 Not Found: Character, item, or item not owned
+
+---
+
 ## Skills
 
 Gathering and crafting skills (life skills).

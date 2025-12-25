@@ -20,9 +20,9 @@ export interface Class {
   created_at: Date;
 }
 
-export type ZoneRisk = 'SAFE' | 'CONTESTED' | 'HIGH_RISK';
-export type LootDropType = 'NONE' | 'PARTIAL' | 'FULL';
-export type ResourceTier = 'COMMON' | 'MID_TIER' | 'EXOTIC';
+export type ZoneRisk = "SAFE" | "CONTESTED" | "HIGH_RISK";
+export type LootDropType = "NONE" | "PARTIAL" | "FULL";
+export type ResourceTier = "COMMON" | "MID_TIER" | "EXOTIC";
 
 export interface Zone {
   id: number;
@@ -49,6 +49,14 @@ export interface Character {
   updated_at: Date;
 }
 
+export interface CharacterPosition {
+  character_id: number;
+  zone_id: number;
+  position_x: number | string;
+  position_y: number | string;
+  updated_at: Date;
+}
+
 export interface Player {
   id: number;
   email: string;
@@ -72,7 +80,7 @@ export interface CharacterWithDetails extends Character {
   skills?: SkillWithLevel[];
 }
 
-export type AbilityType = 'ACTIVE' | 'ULTIMATE';
+export type AbilityType = "ACTIVE" | "ULTIMATE";
 
 export interface Ability {
   id: number;
@@ -119,7 +127,7 @@ export interface PassiveTraitWithLevel extends PassiveTrait {
   current_level: number;
 }
 
-export type SkillCategory = 'GATHERING' | 'CRAFTING' | 'COMBAT';
+export type SkillCategory = "GATHERING" | "CRAFTING" | "COMBAT";
 
 export interface Skill {
   id: number;

@@ -6,8 +6,11 @@ import { createZonesRouter } from "./routes/zones";
 import { createSkillsRouter } from "./routes/skills";
 import { createCharactersRouter } from "./routes/characters";
 import { createAuthRouter } from "./routes/auth";
+import { createWorldRouter } from "./routes/world";
+import { createInventoryRouter } from "./routes/inventory";
+import { GameData } from "./data/gameData";
 
-export const createApp = (db: Database) => {
+export const createApp = (db: Database, gameData: GameData) => {
   const app = express();
   app.use(express.json());
 
@@ -28,6 +31,8 @@ export const createApp = (db: Database) => {
   app.use("/api/skills", createSkillsRouter(db));
   app.use("/api/characters", createCharactersRouter(db));
   app.use("/api/auth", createAuthRouter(db));
+  app.use("/api/world", createWorldRouter(db));
+  app.use("/api/inventory", createInventoryRouter(db, gameData));
 
   return app;
 };

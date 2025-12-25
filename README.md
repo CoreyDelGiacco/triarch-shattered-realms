@@ -72,6 +72,35 @@ Use the returned `token` as a bearer token for session validation:
 curl http://localhost:3000/api/auth/me -H "Authorization: Bearer <token>"
 ```
 
+### World Quickstart
+
+```bash
+# Enter a zone and set a character position
+curl -X POST http://localhost:3000/api/world/zone-enter \
+  -H "Content-Type: application/json" \
+  -d '{"character_id":1,"zone_id":2,"position":{"x":120.5,"y":88.25}}'
+
+# Fetch the current world state for a character
+curl http://localhost:3000/api/world/state/1
+```
+
+### Inventory Quickstart
+
+```bash
+# Add items to a character inventory
+curl -X POST http://localhost:3000/api/inventory/1/add \
+  -H "Content-Type: application/json" \
+  -d '{"item_code":"IRON_ORE","quantity":5}'
+
+# Remove items from a character inventory
+curl -X POST http://localhost:3000/api/inventory/1/remove \
+  -H "Content-Type: application/json" \
+  -d '{"item_code":"IRON_ORE","quantity":2}'
+
+# Fetch inventory
+curl http://localhost:3000/api/inventory/1
+```
+
 ### Database
 
 ```bash
