@@ -1,0 +1,3 @@
+[submodule "vendor/AnyRPGCore"]
+	path = vendor/AnyRPGCore
+	url = https://github.com/AnyRPG/AnyRPGCore.git
