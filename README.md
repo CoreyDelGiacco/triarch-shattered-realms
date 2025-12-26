@@ -68,14 +68,16 @@ The UI lets you register/login, create a character, enter a zone, gather, fight 
 
 ### Unity Playtest Client
 
-A minimal Unity client lives in `client/unity` and renders a basic animated character + NPC with buttons for login, character creation, zone entry, and combat.
+A minimal Unity client lives in `unity/` and renders a basic animated character + NPC with buttons for login, character creation, zone entry, and combat.
+
+The game uses AnyRPGCore (located in `vendor/AnyRPGCore/`) as the engine foundation.
 
 ```bash
 # Open in Unity Hub
-open client/unity
+open unity
 ```
 
-See `client/unity/README.md` for setup steps.
+See `unity/README.md` for setup steps.
 
 ### Auth Stub Quickstart
 
@@ -232,18 +234,22 @@ npm test
 ## Project Structure
 
 ```
-├── client/            # Unity playtest client
-├── docs/              # Design documentation
 ├── design/            # System design docs
+├── data/              # Game data (items, zones, factions, etc.)
+│   └── schemas/       # Data validation schemas
+├── unity/             # Unity project (game client)
+├── vendor/
+│   └── AnyRPGCore/    # AnyRPG engine (git submodule)
+├── docs/              # Design documentation
 ├── migrations/        # Database migrations
 ├── public/            # Playtest UI
 ├── scripts/           # Utility scripts
-├── src/              # Source code
-│   ├── app.ts        # Express application
-│   ├── config.ts     # Configuration management
-│   ├── db.ts         # Database connection
-│   └── server.ts     # Server entry point
-└── tests/            # Test files
+├── src/               # Source code (backend server)
+│   ├── app.ts         # Express application
+│   ├── config.ts      # Configuration management
+│   ├── db.ts          # Database connection
+│   └── server.ts      # Server entry point
+└── tests/             # Test files
 ```
 
 ## License
