@@ -1,4 +1,8 @@
 import { z } from "zod";
+import { config as loadDotenv } from "dotenv";
+
+// Load .env file before parsing environment variables
+loadDotenv();
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
