@@ -3,7 +3,7 @@
 This Unity client provides a lightweight, animated playtest surface for the Triarch server.
 
 ## Requirements
-- Unity 2022.3 LTS (or version recommended by AnyRPGCore)
+- Unity 2021.3 LTS (AnyRPGCore is built with 2021.3.28f1)
 - Triarch server running locally (default `http://localhost:3000`)
 
 ## Project Structure
